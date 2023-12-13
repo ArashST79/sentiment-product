@@ -1,0 +1,32 @@
+/data
+/scripts/fine_tuned_distilbert
+/scripts/sentiment_finetuned_model
+
+
+scripts/test_trainer/runs/*.tfevents*
+scripts/__pycache__/
+# .gitignore
+
+# Virtual environment
+scripts/venv/
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Package directories
+dist/
+build/
+*.egg-info/
+
+# Distribution / packaging
+.Python
+env/
+bin/
+lib/
+include/
+*.egg
+scripts/test_trainer/runs/Nov28_14-48-57_DESKTOP-7742MJB/events.out.tfevents.1701170340.DESKTOP-7742MJB.11328.0
+scripts/test_trainer/runs/Nov28_14-51-52_DESKTOP-7742MJB/events.out.tfevents.1701170512.DESKTOP-7742MJB.8620.0
+scripts/test_trainer/runs/Nov28_14-52-55_DESKTOP-7742MJB/events.out.tfevents.1701170576.DESKTOP-7742MJB.13528.0
