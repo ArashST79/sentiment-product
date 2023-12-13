@@ -41,5 +41,3 @@ python evaluation.py
 Feel free to explore and experiment with different models and datasets to enhance the project's performance.
 
 ---
-
-You can copy and paste this template into your README file and further modify it based on any additional information you'd like to include or specific details about your project.
