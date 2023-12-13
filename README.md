@@ -1,7 +1,3 @@
-Certainly! Below is a template for a structured and informative README file for your sentiment analysis project. I've included sections on project overview, dataset, model fine-tuning, running evaluations, and additional notes. Please customize it further based on your specific project details.
-
----
-
 # Sentiment Analysis of Customer Reviews
 
 ## Overview
