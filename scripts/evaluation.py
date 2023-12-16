@@ -15,20 +15,21 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 class Evaluator:
-    def __init__(self,model,num_labels) -> None:
+    def __init__(self,model,data_loader,num_labels) -> None:
         self.model = model
         self.num_labels = num_labels
         self.all_actual_labels = []
         self.all_predicted_labels = []
         self.mean_difference = None
         self.loss = None
-    def evaluate_model(self,data_loader):
+        self.data_loader = data_loader
+    def evaluate_model(self):
         self.model.eval()
         
         all_val_losses = []
 
         with torch.no_grad():
-            for val_batch in tqdm(data_loader):
+            for val_batch in tqdm(self.data_loader):
                 val_outputs = self.model(**val_batch)
                 val_loss = val_outputs.loss
                 all_val_losses.append(val_loss.item())
@@ -45,21 +46,52 @@ class Evaluator:
         self.loss = sum(all_val_losses) / len(all_val_losses)
         return sum(all_val_losses) / len(all_val_losses), average_difference
     
-    def plot_confusion_matrix(self):
+    def plot_confusion_matrix(self, ax = None):
         class_names = [f"Class {i}" for i in range(self.num_labels)] 
         cm = confusion_matrix(self.all_actual_labels, self.all_predicted_labels)
         disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=class_names)
 
-        # Adjust the size of the plot for better visibility
-        plt.figure(figsize=(8, 8))
-        
+    
         # You can customize the color map as per your preference
         cmap = sns.cubehelix_palette(50, hue=0.05, rot=0, light=0.9, dark=0, as_cmap=True)
         
-        disp.plot(cmap=cmap, values_format="d")
+        disp.plot(ax = ax,cmap=cmap, values_format="d")
 
-        plt.title("Confusion Matrix")
-        plt.show()
+    def display_sample_table(self, sample_indices, review_texts_test, ax=None):
+        sample_data = [(review_texts_test[i], self.all_actual_labels[i], self.all_predicted_labels[i]) for i in sample_indices]
+
+        # Create a table
+        columns = ['Sample Text', 'Actual Label', 'Predicted Label']
+        rows = [f"Sample {i+1}" for i in range(len(sample_indices))]
+
+        # Adjust the size of the plot for better visibility
+        if ax is None:
+            plt.figure(figsize=(12, 8))
+        else:
+            plt.sca(ax)
+
+        cell_text = [[str(data[0])[:200], str(data[1]), str(data[2])] for data in sample_data]
+
+        # Increase the font size for better visibility
+        table = plt.table(cellText=cell_text, colLabels=columns, rowLabels=rows, loc='center', cellLoc='center', fontsize=6)
+
+        # Adjust the table size to fit the content
+        table.auto_set_font_size(False)
+        table.set_fontsize(6)
+        table.auto_set_column_width([0, 1, 2])
+
+        # Customize cell size
+        cell_height = 0.05
+        cell_width = 0.2
+        table.scale(1, 1.5)  # Adjust the scale factor as needed
+
+     
+
+        # Adjust the table size to fit the content
+        plt.subplots_adjust(left=0.1, bottom=0.15, right=0.9, top=0.85)
+
+        plt.axis('off')
+
 
 
 def main():
@@ -69,6 +101,7 @@ def main():
     from preprocessing import Preprocessor
     from transformers import AutoTokenizer,DistilBertForSequenceClassification
     from sklearn.model_selection import train_test_split
+    import random
 
     cache_dir_d_drive = "D:/models"
     tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased', cache_dir=cache_dir_d_drive)
@@ -80,19 +113,41 @@ def main():
     
     train_loader, val_loader = ProductReviewDataset.getDataLoader(review_texts_train, review_texts_test, labels_train, labels_test,tokenizer)
     train_loader_bert, val_loader_bert = ProductReviewDataset.getDataLoader(review_texts_train, review_texts_test, labels_train, labels_test,tokenizer_bert)
-    evaluator = Evaluator(model,num_labels = 5)
-    evaluator.evaluate_model(val_loader)
+    evaluator = Evaluator(model,val_loader,num_labels = 5)
+    evaluator.evaluate_model()
     loss = evaluator.loss
     mean_difference = evaluator.mean_difference
 
-    evaluator_bert = Evaluator(model_bert,num_labels = 5)
-    evaluator_bert.evaluate_model(val_loader_bert)
+    evaluator_bert = Evaluator(model_bert,val_loader_bert,num_labels = 5)
+    evaluator_bert.evaluate_model()
     loss_bert = evaluator_bert.loss
     mean_difference_bert = evaluator_bert.mean_difference
     print(f"for DistilBert Mode : loss = {loss}", f"mean difference = {mean_difference}")
     print(f"for Bert Mode : loss = {loss_bert}", f"mean difference = {mean_difference_bert}")
-    evaluator.plot_confusion_matrix()
-    evaluator_bert.plot_confusion_matrix()
+
+    fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(14, 7))
+    evaluator.plot_confusion_matrix(ax = axes[0])
+    axes[0].set_title("DistilBert Confusion Matrix")
+    evaluator_bert.plot_confusion_matrix(ax = axes[1])
+    axes[1].set_title("Bert Confusion Matrix")
+
+    # Adjust layout for better spacing
+    plt.tight_layout()
+
+    fig2, axes2 = plt.subplots(nrows=2, ncols=1, figsize=(20, 12))
+    num_samples = 15
+    sample_indices = random.sample(range(len(evaluator.all_actual_labels)), num_samples)
+    
+    evaluator.display_sample_table(sample_indices, review_texts_test, ax=axes2[0])
+    axes2[0].set_title("DistilBert Sample Table")
+    evaluator_bert.display_sample_table(sample_indices, review_texts_test, ax=axes2[1])
+    axes2[1].set_title("Bert Sample Table")
+
+    # Adjust layout for better spacing
+    plt.tight_layout()
+
+    # Show the combined figure
+    plt.show()
 
 if __name__ == "__main__":
     main()
