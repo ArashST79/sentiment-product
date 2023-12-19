@@ -10,7 +10,7 @@ The dataset used for this project consists of approximately 20,000 customer comm
 
 ## Model Fine-Tuning
 
-### Updated Model Description and Evaluation Process
+### Model Description and Evaluation Process
 
 The project features three distinct models, each serving a specific purpose in sentiment analysis. The models include two fine-tuned models, namely 'distilbert-base-uncased' and 'distilroberta-base,' both trained on project-specific data. Additionally, a pre-built classification model, 'nlptown/bert-base-multilingual-uncased-sentiment' from Hugging Face, fine-tuned on external data, is incorporated for comparison.
 
