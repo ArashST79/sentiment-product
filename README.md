@@ -10,23 +10,39 @@ The dataset used for this project consists of approximately 20,000 customer comm
 
 ## Model Fine-Tuning
 
-### Fine-Tuned Model
+### Updated Model Description and Evaluation Process
 
-The project employs the 'distilbert-base-uncased' model from Hugging Face as the base model for fine-tuning. This model is chosen for its lower size, making it suitable for training and testing on CPU.
+The project features three distinct models, each serving a specific purpose in sentiment analysis. The models include two fine-tuned models, namely 'distilbert-base-uncased' and 'distilroberta-base,' both trained on project-specific data. Additionally, a pre-built classification model, 'nlptown/bert-base-multilingual-uncased-sentiment' from Hugging Face, fine-tuned on external data, is incorporated for comparison.
 
-To fine-tune the model, the sentiment labels are transformed into a classification task, converting the sentiment scores into star ratings. The fine-tuning process is implemented in the `evaluation.py` script, providing insights into the model's performance.
+#### Fine-Tuned Models
 
-### Pre-Built Model
+1. **DistilBERT (Uncased):**
+   - The 'distilbert-base-uncased' model has been fine-tuned on project-specific data. Its selection is based on its compact size, making it suitable for training and testing on CPU.
 
-Additionally, a pre-built classification model, 'nlptown/bert-base-multilingual-uncased-sentiment,' is included in the evaluation process. This model is specifically fine-tuned for customer reviews.
+2. **DistilRoBERTa (Base):**
+   - A second fine-tuned model, 'distilroberta-base,' has been created through the training process outlined in the `trainer.ipynb` notebook. This model complements the DistilBERT variant and provides an alternative for evaluation.
 
-## Running Evaluations
+#### Pre-Built Model
 
-To evaluate the fine-tuned and pre-built models, run the `evaluation.py` script. This script generates confusion matrices for each model, facilitating a comparative analysis of their performance. The confusion matrices offer a visual representation of how well the models classify sentiments across different classes.
+3. **Pre-Built BERT Model:**
+   - The project incorporates a pre-built classification model, 'nlptown/bert-base-multilingual-uncased-sentiment,' obtained from Hugging Face. This model has been fine-tuned on external data specifically for customer reviews.
 
-```bash
-python evaluation.py
-```
+#### Running Evaluations
+
+To assess and compare the performance of these models, follow these steps:
+
+1. **Training Fine-Tuned Models:**
+   - Navigate to the `notebooks` folder and execute the cells in `trainer.ipynb` to train both fine-tuned DistilBERT and DistilRoBERTa models.
+
+2. **Evaluating Models:**
+   - Access the `evaluator.ipynb` notebook for detailed evaluations and comparisons.
+   - The notebook includes two distinct comparisons:
+     - Evaluation between fine-tuned DistilBERT and the pre-built BERT model ('nlptown/bert-base-multilingual-uncased-sentiment').
+     - Evaluation between fine-tuned DistilBERT and fine-tuned DistilRoBERTa.
+   - Each comparison provides mean loss and mean difference metrics for each model, accompanied by confusion matrices and random samples with true and predicted labels for enhanced understanding.
+
+3. **Adjusting Data Samples:**
+   - Customize the number of data samples for training or evaluation by accessing the `scripts` folder and modifying the `datahandler.py` file.
 
 ## Additional Notes
 
