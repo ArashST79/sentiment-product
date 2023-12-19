@@ -51,27 +51,5 @@ def train_and_evaluate_model(train_loader,val_loader, model):
         all_actual_labels.append(epoch_actual_labels)
         all_predicted_labels.append(epoch_predicted_labels)
 
-    model.save_pretrained('fine_tuned_distilbert')
+    return model
 
-def main():
-    import os
-    import pandas as pd
-    from data_handler import get_data
-    from preprocessing import Preprocessor
-    from transformers import AutoTokenizer,DistilBertForSequenceClassification
-    from sklearn.model_selection import train_test_split
-
-    cache_dir_d_drive = "D:/models"
-    tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased', cache_dir=cache_dir_d_drive)
-    model = DistilBertForSequenceClassification.from_pretrained('distilbert-base-uncased', cache_dir=cache_dir_d_drive, num_labels = 5)
-
-    review_texts, labels = get_data()
-    review_texts_train, review_texts_test, labels_train, labels_test = train_test_split(review_texts, labels, test_size=0.2, random_state=42)
-    
-    train_loader, val_loader = ProductReviewDataset.getDataLoader(review_texts_train, review_texts_test, labels_train, labels_test,tokenizer)
-
-    train_and_evaluate_model(train_loader, val_loader, model)
-    # train_and_evaluate_model(preprocessor.X_train_preprocessed, preprocessor.y_train_preprocessed, preprocessor.X_test_preprocessed, preprocessor.y_test_preprocessed)
-
-if __name__ == "__main__":
-    main()

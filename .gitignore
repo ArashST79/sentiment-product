@@ -30,3 +30,4 @@ include/
 scripts/test_trainer/runs/Nov28_14-48-57_DESKTOP-7742MJB/events.out.tfevents.1701170340.DESKTOP-7742MJB.11328.0
 scripts/test_trainer/runs/Nov28_14-51-52_DESKTOP-7742MJB/events.out.tfevents.1701170512.DESKTOP-7742MJB.8620.0
 scripts/test_trainer/runs/Nov28_14-52-55_DESKTOP-7742MJB/events.out.tfevents.1701170576.DESKTOP-7742MJB.13528.0
+models/
