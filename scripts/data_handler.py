@@ -7,7 +7,7 @@ def get_data():
 
     df = pd.read_excel(file_path)
     df.dropna(subset=['Sentiment'], inplace=True)
-    df = df.iloc[:10000]
+    df = df.iloc[10000:10500]
     labels = df['Sentiment'].tolist()
     labels = [int(round((x+1)/2*4)) for x in labels]
     return df['Review Text'].tolist(), labels
