@@ -40,6 +40,7 @@ To assess and compare the performance of these models, follow these steps:
      - Evaluation between fine-tuned DistilBERT and the pre-built BERT model ('nlptown/bert-base-multilingual-uncased-sentiment').
      - Evaluation between fine-tuned DistilBERT and fine-tuned DistilRoBERTa.
    - Each comparison provides mean loss and mean difference metrics for each model, accompanied by confusion matrices and random samples with true and predicted labels for enhanced understanding.
+   - The worst predicted samples for each of the models are also available
 
 3. **Adjusting Data Samples:**
    - Customize the number of data samples for training or evaluation by accessing the `scripts` folder and modifying the `datahandler.py` file.

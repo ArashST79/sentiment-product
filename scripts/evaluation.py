@@ -92,4 +92,39 @@ class Evaluator:
 
         plt.axis('off')
 
+    def display_worst_predictions(self, n, review_texts_test):
+        # Calculate the absolute differences between actual and predicted labels
+        absolute_differences = np.abs(np.array(self.all_actual_labels) - np.array(self.all_predicted_labels))
+
+        # Get the indices of the n samples with the highest absolute differences
+        worst_indices = np.argsort(absolute_differences)[-n:]
+
+
+        # Extract the data for the worst predictions
+        worst_data = [(review_texts_test[i], self.all_actual_labels[i], self.all_predicted_labels[i]) for i in worst_indices]
+
+        # Create a table
+        columns = ['Sample Text', 'Actual Label', 'Predicted Label']
+        rows = [f"Worst Sample {i+1}" for i in range(len(worst_indices))]
+
+        cell_text = [[str(data[0])[:200], str(data[1]), str(data[2])] for data in worst_data]
+
+        plt.figure(figsize=(15, 20))
+        table = plt.table(cellText=cell_text, colLabels=columns, rowLabels=rows, loc='center', cellLoc='center', fontsize=12)
+
+        table.auto_set_font_size(False)
+        table.set_fontsize(12)
+        table.auto_set_column_width([0, 1, 2])
+
+        cell_height = 0.05
+        cell_width = 0.2
+        table.scale(1, 5)  
+
+        plt.subplots_adjust(left=0.1, bottom=0.15, right=0.9, top=0.85)
+
+        plt.axis('off')
+        plt.show()
+        
+
+
 
